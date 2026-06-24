@@ -44,11 +44,11 @@ DESCRIPTION = {
     "dinet":                        "ElettraST Dinet",
     "arria10-daq":                  "ElettraST Arria10-daq",
     "nehalem-kvm":                  "KVM Virtual machine using Nehalem",
-    "naples-kvm":                   "KVM Virtual machine using Naples",
-    "ivybridge-kvm":                "KVM Virtual machine using Ivybridge",
-    "skylake-kvm":                  "KVM Virtual machine using Skylake",
-    "cascadelake-kvm":              "KVM Virtual machine using Cascadelake",
-    "rome-kvm":                     "KVM Virtual machine using Rome",
+    "naples-kvm":                   "KVM Virtual machine using Naples<br>(grongo, srv-hyp-srf-01/05.fcs)",
+    "ivybridge-kvm":                "KVM Virtual machine using Ivybridg<br>(srv-hyp-srf-06/07.fcs)",
+    "skylake-kvm":                  "KVM Virtual machine using Skylake<br>(sofa-cli-07/10)",
+    "cascadelake-kvm":              "KVM Virtual machine using Cascadelake<br>(sofa-cli-14/16/19, srv-hyp-sre-01/05.ecs)",
+    "rome-kvm":                     "KVM Virtual machine using Rome<br>(sofa-cli-11/12)",
     "beaglebone":                   "Beaglebone White/Black/Red/Blue/Green",
     "beagleboneai":                 "Beaglebone AI",
     "sockit":                       "Terasic Sockit with Altera CycloneV FPGA",
@@ -251,7 +251,7 @@ def _row(cells):
     return "<tr>\n" + "\n".join(_td(c) for c in cells) + "\n</tr>"
 
 
-_EMPTY_ROW = "<tr>\n" + "\n".join(["<td></td>"] * 7) + "\n</tr>"
+_EMPTY_ROW = "<tr>\n" + "\n".join(["<td></td>"] * 8) + "\n</tr>"
 _SEPARATOR = _EMPTY_ROW + "\n" + _EMPTY_ROW
 
 
@@ -283,14 +283,14 @@ def render(releases):
 
         for board in sorted(items[image]):
             board_label = board
-            if board in DESCRIPTION:
-                board_label += f" ({DESCRIPTION[board]})"
+            notes = DESCRIPTION.get(board, "")
             for version in sorted(items[image][board], key=version_sort_key):
                 node = items[image][board][version]
                 out.append(_row([
                     display,
                     ref,
                     board_label,
+                    notes,
                     version,
                     sdk_cell(node.get("sdk", {})),
                     image_cell(node.get("sde", {}), with_updates=False),
@@ -375,7 +375,7 @@ font-size: 12px;
 }
 </style>
 <title>Voltumna Linux</title>
-<base href="https://www.elettra.eu/images/Documents/Voltumna/" target="_blank">
+<base href="https://www-int.elettra.eu/images/Documents/Voltumna/" target="_blank">
 </head>
 <body>
 <div class="container">
@@ -393,8 +393,9 @@ font-size: 12px;
 <tr>
 <th scope="col">Image</th>
 <th scope="col">Ref</th>
-<th scope="col">Board</th>
-<th scope="col">Version</th>
+                <th scope="col">Board</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Version</th>
 <th scope="col">SDK</th>
 <th scope="col">SDE</th>
 <th scope="col">SRE</th>
